@@ -1,0 +1,34 @@
+/* Style de base pour le conteneur du ChatInput - structure commune */
+.chat-input-container {
+  display: flex;
+  padding: 15px 20px;
+  width: 100%;
+}
+
+/* Style pour la zone de texte - structure commune */
+.chat-input-textarea {
+  flex-grow: 1;
+  border-radius: 4px;
+  padding: 10px 12px;
+  resize: none;
+  outline: none;
+  line-height: 1.4;
+}
+
+/* Style pour le bouton d'envoi - structure commune */
+.chat-input-button {
+  margin-left: 10px;
+  padding: 0 15px;
+  align-self: flex-end;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Styles pour les états du bouton - structure commune */
+.chat-input-button:disabled {
+  cursor: default;
+}
+
+.chat-input-button:not(:disabled) {
+  cursor: pointer;
+}

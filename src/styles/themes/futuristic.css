@@ -1,0 +1,216 @@
+/* Thème futuriste pour l'application de chat - Aspects visuels uniquement */
+
+/* Variables CSS pour le thème futuriste */
+:root {
+  --theme-primary-color: #01c2cb;
+  --theme-secondary-color: #0086f8;
+  --theme-text-color: #e1f2ff;
+  --theme-font-family: 'Rajdhani', 'Orbitron', sans-serif;
+  --theme-glow: 0 0 10px rgba(1, 194, 203, 0.5);
+  --theme-scan-line: repeating-linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(1, 194, 203, 0.05) 0.5%,
+    transparent 1%
+  );
+}
+
+/* Application des variables au conteneur principal */
+.rpg-chat-container {
+    background-image: url('../../assets/background2.jpg');
+}
+
+/* Effet de scanline sur tout l'écran */
+.rpg-chat-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--theme-scan-line);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.3;
+}
+
+/* Style de la zone d'historique */
+.chat-history {
+  background-color: rgba(10, 14, 35, 0.8);
+  color: #c8e3ff;
+  border: 1px solid var(--theme-primary-color);
+  box-shadow: var(--theme-glow);
+  backdrop-filter: blur(5px);
+}
+
+.history-message.user-message {
+  background-color: rgba(0, 134, 248, 0.3);
+  border-left: 2px solid var(--theme-secondary-color);
+}
+
+.history-message.bot-message {
+  background-color: rgba(1, 194, 203, 0.2);
+  border-left: 2px solid var(--theme-primary-color);
+}
+
+/* Style de la bulle de dialogue */
+.dialog-bubble {
+  background-color: rgba(1, 194, 203, 0.2);
+  border: 1px solid var(--theme-primary-color);
+  box-shadow: var(--theme-glow);
+  color: var(--theme-text-color);
+  font-family: var(--theme-font-family);
+  font-size: 18px;
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.5px;
+}
+
+.dialog-bubble::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--theme-primary-color), transparent);
+  animation: scanlight 4s infinite linear;
+}
+
+@keyframes scanlight {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.dialog-bubble-arrow {
+  background-color: rgba(1, 194, 203, 0.2);
+  border-right: 1px solid var(--theme-primary-color);
+  border-bottom: 1px solid var(--theme-primary-color);
+}
+
+/* Style du message d'erreur */
+.error-message {
+  background-color: rgba(255, 71, 87, 0.8);
+  color: white;
+  border-left: 3px solid #ff1f3d;
+}
+
+/* Style des suggestions */
+.suggestions {
+  background-color: rgba(10, 14, 35, 0.8);
+  backdrop-filter: blur(5px);
+  border: 1px solid var(--theme-primary-color);
+}
+
+.suggestion-button {
+  background-color: rgba(1, 194, 203, 0.2);
+  border: 1px solid var(--theme-primary-color);
+  color: var(--theme-text-color);
+  font-family: var(--theme-font-family);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  box-shadow: var(--theme-glow);
+}
+
+.suggestion-button:hover {
+  background-color: rgba(1, 194, 203, 0.4);
+  box-shadow: 0 0 15px rgba(1, 194, 203, 0.7);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Style du conteneur d'input */
+.chat-input-container {
+  background-color: rgba(10, 14, 35, 0.8);
+  border: 1px solid var(--theme-primary-color);
+  border-radius: 4px;
+  box-shadow: var(--theme-glow);
+  backdrop-filter: blur(5px);
+}
+
+/* Style du textarea */
+.chat-input-textarea {
+  border: 1px solid var(--theme-primary-color);
+  font-family: var(--theme-font-family);
+  font-size: 16px;
+  background-color: rgba(10, 14, 35, 0.5);
+  color: var(--theme-text-color);
+  letter-spacing: 0.5px;
+}
+
+.chat-input-textarea:disabled {
+  background-color: rgba(10, 14, 35, 0.8);
+  border: 1px solid rgba(1, 194, 203, 0.3);
+}
+
+.chat-input-textarea::placeholder {
+  color: rgba(1, 194, 203, 0.7);
+}
+
+/* Style du bouton */
+.chat-input-button {
+  border: none;
+  background-color: var(--theme-primary-color);
+  color: #0a0e23;
+  height: 40px;
+  font-weight: 600;
+  font-family: var(--theme-font-family);
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  box-shadow: var(--theme-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-input-button::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+  background: linear-gradient(45deg, transparent, rgba(1, 194, 203, 0.5), transparent);
+  transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  animation: buttonShine 3s infinite;
+}
+
+@keyframes buttonShine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  20% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.chat-input-button:hover:not(:disabled) {
+  background-color: #02d8e1;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(1, 194, 203, 0.7);
+}
+
+/* Texte de chargement */
+.loading-indicator {
+  background: rgba(10, 14, 35, 0.5);
+  border-radius: 15px;
+}
+
+.loading-dots {
+  color: var(--theme-primary-color);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.loading-text {
+  color: var(--theme-text-color);
+  opacity: 0.7;
+}
+
+/* Textes personnalisés pour le thème */
+.chat-input-button:not(:disabled)::after {
+  content: "Transmettre";
+}
+
+.chat-input-button:disabled::after {
+  content: "Analyse...";
+}
