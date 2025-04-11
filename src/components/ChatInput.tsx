@@ -29,7 +29,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={disabled ? "Attendez une réponse..." : "Écrivez un message..."}
+        placeholder={disabled ? "Waiting for response..." : "Write a message..."}
         disabled={disabled}
         rows={2}
       />
@@ -38,7 +38,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
         onClick={handleSubmit}
         disabled={!message.trim() || disabled}
       >
-        {disabled ? 'Attente...' : 'Envoyer'}
+        {disabled ? 'Waiting...' : 'Send'}
       </button>
     </div>
   );

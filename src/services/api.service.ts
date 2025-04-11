@@ -2,7 +2,7 @@ import { config } from '../config/env.config';
 import { ChatRequest, ConversationNode, ErrorResponse } from '../types/api.types';
 
 /**
- * Service pour gérer les appels à l'API NPC-LLM
+ * Service to manage NPC-LLM API calls
  */
 export class ApiService {
   private readonly baseUrl: string;
@@ -12,15 +12,15 @@ export class ApiService {
   }
 
   /**
-   * Envoie un message à l'API et récupère la réponse du NPC
+   * Sends a message to the API and retrieves the NPC response
    * 
-   * @param characterId - L'ID du personnage
-   * @param message - Le message de l'utilisateur
-   * @param nodeId - L'ID du nœud de conversation actuel (null pour le premier message)
-   * @param previousMessage - Le message précédent de l'utilisateur
-   * @param chatSummary - Le résumé de la conversation
-   * @returns La réponse du NPC sous forme d'un nœud de conversation
-   * @throws {Error} Si la requête échoue
+   * @param characterId - The character ID
+   * @param message - The user's message
+   * @param nodeId - The ID of the current conversation node (null for the first message)
+   * @param previousMessage - The previous user message
+   * @param chatSummary - The conversation summary
+   * @returns The NPC response as a conversation node
+   * @throws {Error} If the request fails
    */
   async sendMessage(characterId:number, message: string, nodeId: string | null, previousMessage: string, chatSummary: string): Promise<ConversationNode & { chatSummary: string }> {
     try {
@@ -42,18 +42,18 @@ export class ApiService {
 
       if (!response.ok) {
         const errorData: ErrorResponse = await response.json();
-        throw new Error(errorData.error || `Erreur ${response.status}`);
+        throw new Error(errorData.error || `Error ${response.status}`);
       }
 
       return await response.json() as ConversationNode & { chatSummary: string };
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du message:', error);
+      console.error('Error sending message:', error);
       throw error;
     }
   }
 }
 
-// Exporter une instance unique du service
+// Export a single instance of the service
 export const apiService = new ApiService();
 
 export default apiService;

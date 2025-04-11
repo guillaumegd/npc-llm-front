@@ -2,10 +2,10 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export type ThemeType = 'medieval' | 'futuristic';
 
-// Association des thèmes aux IDs de personnage
+// Association of themes to character IDs
 export const THEME_CHARACTER_MAP: Record<ThemeType, number> = {
-  'medieval': 1,  // Alaric pour le thème médiéval
-  'futuristic': 2 // Nexus pour le thème futuriste
+  'medieval': 1,  // Alaric for medieval theme
+  'futuristic': 2 // Nexus for futuristic theme
 };
 
 interface ThemeContextType {

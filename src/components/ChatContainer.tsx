@@ -3,17 +3,17 @@ import ChatInput from "./ChatInput";
 import { useConversation } from "../hooks/useConversation";
 import { useTheme } from "../context/ThemeContext";
 
-// Import des différents avatars
-import avatar1 from "../assets/avatar1.png"; // Avatar pour le thème médiéval
-import avatar2 from "../assets/avatar2.png"; // Avatar pour le thème futuriste
+// Import different avatars
+import avatar1 from "../assets/avatar1.png"; // Avatar for medieval theme
+import avatar2 from "../assets/avatar2.png"; // Avatar for futuristic theme
 
 const ChatContainer: React.FC = () => {
   const { currentTheme, getCharacterId } = useTheme();
   
-  // Obtenir le characterId en fonction du thème actuel
+  // Get characterId based on current theme
   const characterId = getCharacterId();
   
-  // Utiliser le hook useConversation avec le characterId actuel
+  // Use the useConversation hook with the current characterId
   const { 
     messages, 
     sendMessage, 
@@ -24,25 +24,25 @@ const ChatContainer: React.FC = () => {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Sélection de l'avatar et du nom en fonction du thème
+  // Select avatar and name based on theme
   const avatarImage = currentTheme === 'medieval' ? avatar1 : avatar2;
   const characterName = currentTheme === 'medieval' ? 'Alaric' : 'Nexus';
 
-  // Scroll automatique vers le bas quand de nouveaux messages sont ajoutés
+  // Auto-scroll to bottom when new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // On récupère le dernier message non utilisateur (message du personnage)
+  // Get the last non-user message (character message)
   const lastBotMessage = [...messages]
     .reverse()
     .find((message) => !message.isUser);
 
   return (
     <div className="rpg-chat-container">
-      {/* Zone de messages scrollable (historique) */}
+      {/* Scrollable message area (history) */}
       <div className="chat-history">
-        <h3>Historique</h3>
+        <h3>History</h3>
         {messages.map((message) => (
           <div
             key={message.id}
@@ -50,25 +50,25 @@ const ChatContainer: React.FC = () => {
               message.isUser ? "user-message" : "bot-message"
             }`}
           >
-            <strong>{message.isUser ? "Vous" : characterName}: </strong>
+            <strong>{message.isUser ? "You" : characterName}: </strong>
             {message.content}
           </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Personnage */}
+      {/* Character */}
       <div className="character">
         <img src={avatarImage} alt={characterName} />
       </div>
 
-      {/* Bulle de dialogue */}
+      {/* Dialog bubble */}
       {lastBotMessage && (
         <div className="dialog-bubble">
           {isLoading ? (
             <div className="loading-indicator">
               <div className="loading-dots">...</div>
-              <div className="loading-text">{characterName} réfléchit...</div>
+              <div className="loading-text">{characterName} is thinking...</div>
             </div>
           ) : (
             <div>
@@ -79,10 +79,10 @@ const ChatContainer: React.FC = () => {
         </div>
       )}
 
-      {/* Affichage des erreurs */}
-      {error && <div className="error-message">Erreur: {error}</div>}
+      {/* Error display */}
+      {error && <div className="error-message">Error: {error}</div>}
 
-      {/* Zone de suggestions */}
+      {/* Suggestions area */}
       {availableIntents.length > 0 && (
         <div className="suggestions">
           {availableIntents.map((intent, index) => (

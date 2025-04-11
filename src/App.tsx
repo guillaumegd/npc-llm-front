@@ -3,33 +3,33 @@ import './App.css'
 import ChatContainer from './components/ChatContainer'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
 
-// Importation des styles de base
+// Import basic styles
 import './styles/ChatContainer.css'
 import './styles/ChatInput.css'
 
-// Import dynamique des styles de thème
+// Dynamic import of theme styles
 import './styles/themes/medieval.css'
 import './styles/themes/futuristic.css'
 
-// Composant principal qui utilise le contexte de thème
+// Main component that uses the theme context
 const AppContent = () => {
   const { currentTheme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Effet pour appliquer les classes CSS du thème actuel
+  // Effect to apply CSS classes for the current theme
   useEffect(() => {
-    // Marquer le composant comme monté
+    // Mark the component as mounted
     setMounted(true);
     
-    // Supprimer toutes les classes de thème du body
+    // Remove all theme classes from the body
     document.body.classList.remove('theme-medieval', 'theme-futuristic');
     
-    // Ajouter la classe correspondant au thème actuel
+    // Add the class corresponding to the current theme
     document.body.classList.add(`theme-${currentTheme}`);
     
   }, [currentTheme]);
 
-  if (!mounted) return null; // Éviter le rendu côté serveur pour prévenir les incohérences
+  if (!mounted) return null; // Avoid server-side rendering to prevent inconsistencies
 
   return (
     <div style={{
@@ -39,7 +39,7 @@ const AppContent = () => {
       overflow: 'hidden',
       position: 'relative'
     }}>
-      {/* Bouton de changement de thème */}
+      {/* Theme toggle button */}
       <button
         onClick={toggleTheme}
         style={{
@@ -55,7 +55,7 @@ const AppContent = () => {
           cursor: 'pointer'
         }}
       >
-        Changer de thème ({currentTheme})
+        Change Theme ({currentTheme})
       </button>
       
       <div style={{ 
@@ -69,7 +69,7 @@ const AppContent = () => {
   );
 };
 
-// Fonction App avec ThemeProvider
+// App function with ThemeProvider
 function App() {
   return (
     <ThemeProvider>

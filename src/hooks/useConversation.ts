@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { apiService } from "../services/api.service";
 
 /**
- * Type pour représenter un message dans la conversation
+ * Type representing a message in the conversation
  */
 export interface Message {
   id: string;
@@ -13,7 +13,7 @@ export interface Message {
 }
 
 /**
- * Hook personnalisé pour gérer l'état de la conversation avec l'API
+ * Custom hook to manage conversation state with the API
  */
 export const useConversation = (initialCharacterId: number = 1) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -26,15 +26,15 @@ export const useConversation = (initialCharacterId: number = 1) => {
   const [chatSummary, setChatSummary] = useState<string>("");
   const [characterId, setCharacterId] = useState<number>(initialCharacterId);
   
-  // Utiliser une ref pour suivre si c'est le premier rendu
+  // Use a ref to track if this is the first render
   const initialRenderRef = useRef(true);
   
-  // Référence pour suivre si un appel de réinitialisation est en cours
+  // Reference to track if a reset call is in progress
   const isResettingRef = useRef(false);
 
-  // Fonction pour initialiser/réinitialiser la conversation
+  // Function to initialize/reset the conversation
   const initializeConversation = useCallback(async () => {
-    // Éviter les appels multiples simultanés
+    // Avoid multiple simultaneous calls
     if (isResettingRef.current) return;
     isResettingRef.current = true;
     
@@ -48,7 +48,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
     setIsLoading(true);
     
     try {
-      // Envoyer une requête avec contenu vide et nodeId null pour obtenir le premier message
+      // Send a request with empty content and null nodeId to get the first message
       const initialNode = await apiService.sendMessage(
         characterId,
         "",
@@ -57,7 +57,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
         ""
       );
 
-      // Ajouter le message initial du bot
+      // Add the bot's initial message
       setMessages([
         {
           id: Date.now().toString(),
@@ -68,18 +68,18 @@ export const useConversation = (initialCharacterId: number = 1) => {
         },
       ]);
 
-      // Enregistrer les intentions disponibles
+      // Register available intents
       setAvailableIntents(initialNode.intents);
       setCurrentNodeId(initialNode.id);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Erreur lors du chargement initial"
+        err instanceof Error ? err.message : "Error during initial loading"
       );
-      // Message de secours si le chargement initial échoue
+      // Fallback message if initial loading fails
       setMessages([
         {
           id: Date.now().toString(),
-          content: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
+          content: "Hello! How can I help you today?",
           isUser: false,
           timestamp: new Date(),
           nodeId: null,
@@ -91,7 +91,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
     }
   }, [characterId]);
 
-  // Effet pour mettre à jour le characterId quand initialCharacterId change
+  // Effect to update characterId when initialCharacterId changes
   useEffect(() => {
     if (initialCharacterId !== characterId) {
       console.log(`Character ID changed from ${characterId} to ${initialCharacterId}`);
@@ -99,7 +99,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
     }
   }, [initialCharacterId, characterId]);
 
-  // Charger le nœud initial au montage du composant
+  // Load the initial node when component mounts
   useEffect(() => {
     if (initialRenderRef.current) {
       initialRenderRef.current = false;
@@ -107,7 +107,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
     }
   }, [initializeConversation]);
 
-  // Réinitialiser la conversation lorsque characterId change
+  // Reset the conversation when characterId changes
   useEffect(() => {
     if (!initialRenderRef.current) {
       console.log(`Character ID effect triggered with ID: ${characterId}`);
@@ -115,18 +115,18 @@ export const useConversation = (initialCharacterId: number = 1) => {
     }
   }, [characterId, initializeConversation]);
 
-  // Fonction pour changer le personnage et réinitialiser la conversation
+  // Function to change the character and reset the conversation
   const changeCharacter = useCallback((newCharacterId: number) => {
     console.log(`Changing character ID to ${newCharacterId}`);
     setCharacterId(newCharacterId);
   }, []);
 
-  // Fonction pour envoyer un message à l'API
+  // Function to send a message to the API
   const sendMessage = useCallback(
     async (content: string) => {
       if (messages.length === 0) return;
       
-      // Ajouter le message de l'utilisateur à la liste
+      // Add the user's message to the list
       const userMessageId = Date.now().toString();
       const userMessage: Message = {
         id: userMessageId,
@@ -141,7 +141,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
 
       try {
         const lastBotMessage = [...messages].reverse().find(m => !m.isUser);
-        // Envoyer le message à l'API
+        // Send the message to the API
         console.log(`Sending message with character ID: ${characterId}`);
         const response = await apiService.sendMessage(
           characterId,
@@ -152,7 +152,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
         );
         setChatSummary(response.chatSummary);
 
-        // Ajouter la réponse du bot à la liste des messages
+        // Add the bot's response to the message list
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
           content: response.content,
@@ -163,14 +163,14 @@ export const useConversation = (initialCharacterId: number = 1) => {
 
         setMessages((prev) => [...prev, botMessage]);
 
-        // Mettre à jour le nœud courant et les intentions disponibles
+        // Update current node and available intents
         setCurrentNodeId(response.id);
         setAvailableIntents(response.intents);
       } catch (err) {
         setError(
           err instanceof Error
             ? err.message
-            : "Erreur lors de l'envoi du message"
+            : "Error sending message"
         );
       } finally {
         setIsLoading(false);

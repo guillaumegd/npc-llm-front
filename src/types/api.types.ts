@@ -1,5 +1,5 @@
 /**
- * Types pour l'API NPC-LLM basés sur la spécification OpenAPI
+ * Types for NPC-LLM API based on OpenAPI specification
  */
 
 export interface ConversationIntent {
