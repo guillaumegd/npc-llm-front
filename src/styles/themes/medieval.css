@@ -117,10 +117,6 @@
   content: "Speak";
 }
 
-.theme-medieval .chat-input-button:disabled::after {
-  content: "Waiting...";
-}
-
 .theme-medieval .chat-input-textarea::placeholder {
   color: #79553D;
   opacity: 0.7;

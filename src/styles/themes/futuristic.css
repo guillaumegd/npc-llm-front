@@ -210,7 +210,3 @@
 .theme-futuristic .chat-input-button:not(:disabled)::after {
   content: "Transmit";
 }
-
-.theme-futuristic .chat-input-button:disabled::after {
-  content: "Analyzing...";
-}

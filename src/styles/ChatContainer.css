@@ -87,6 +87,11 @@
   font-size: 14px;
 }
 
+.history-messages-container {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
 .history-message {
   margin-bottom: 8px;
   padding: 6px;
@@ -196,4 +201,248 @@
   transform: translateX(-50%);
   width: 80%;
   max-width: 700px;
+  z-index: 25; /* Plus élevé que les suggestions */
+}
+
+/* Bouton pour afficher/masquer l'historique sur mobile */
+.history-toggle-button {
+  display: none;
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  z-index: 100;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.history-toggle-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---- STYLES RESPONSIVES ---- */
+
+/* Tablettes et appareils moyens */
+@media screen and (max-width: 1024px) {
+  .character img {
+    height: 60vh;
+  }
+
+  .dialog-bubble {
+    top: 60px;
+    max-width: 90%;
+  }
+  
+  .settings-bar {
+    top: 10px;
+    right: 10px;
+    gap: 10px;
+  }
+  
+  .chat-history {
+    width: 200px;
+    top: 20%;
+    max-height: 180px;
+  }
+  
+  .suggestions {
+    bottom: 80px;
+    max-width: 90%;
+  }
+  
+  .input-container {
+    width: 90%;
+  }
+}
+
+/* Mobiles en mode paysage */
+@media screen and (max-width: 850px) and (orientation: landscape) {
+  .character {
+    left: -10%;
+  }
+  
+  .character img {
+    height: 80vh;
+  }
+  
+  .chat-history {
+    width: 180px;
+    max-height: 120px;
+    font-size: 11px;
+  }
+  
+  .dialog-bubble {
+    max-width: 60%;
+    left: 60%;
+  }
+
+  .input-container {
+    width: 60%;
+    max-width: 500px;
+    left: 60%;
+  }
+
+  .suggestions {
+    width: 60%;
+    left: 60%;
+  }
+}
+
+/* Mobiles en mode portrait */
+@media screen and (max-width: 768px) {
+  .settings-bar {
+    display: flex;
+    flex-direction: column;
+    top: 10px;
+    right: 10px;
+    gap: 8px;
+  }
+  
+  .theme-toggle .theme-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .language-selector .lang-button {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+  }
+  
+  .character img {
+    height: 50vh;
+  }
+  
+  .character {
+    left: -10%;
+    bottom: 70px;
+  }
+  
+  .dialog-bubble {
+    top: 140px; /* Position plus basse pour éviter les boutons */
+    padding: 15px;
+    font-size: 14px;
+    max-width: 90%;
+    z-index: 5;
+  }
+  
+  .chat-history {
+    position: fixed; /* Utilisation de fixed pour un positionnement plus stable */
+    width: 100%;
+    max-height: 250px; /* Plus d'espace pour l'historique */
+    top: unset;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px 5px;
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0.8); /* Plus opaque pour une meilleure lisibilité */
+    transform: translateY(100%); /* Caché par défaut */
+    transition: transform 0.3s ease;
+    z-index: 1000; /* Plus élevé pour être au-dessus de tous les éléments */
+    pointer-events: none; /* Empêche l'interaction quand masqué */
+    opacity: 0; /* Invisibilité complète quand masqué */
+  }
+  
+  .chat-history.mobile-visible {
+    transform: translateY(0);
+    pointer-events: auto; /* Réactive l'interaction quand visible */
+    opacity: 1; /* Pleinement visible */
+  }
+  
+  .history-toggle-button {
+    display: block;
+    top: 100px; /* Position plus basse pour éviter la bulle de dialogue */
+    right: 10px;
+    z-index: 101;
+  }
+  
+  .history-messages-container {
+    max-height: 200px;
+    padding-bottom: 10px;
+  }
+  
+  .input-container {
+    width: 95%;
+    bottom: 20px; /* Plus d'espace en bas */
+  }
+  
+  .suggestions {
+    bottom: 120px; /* Plus d'espace avec la zone d'input */
+    padding: 8px;
+    max-width: 90%;
+    z-index: 20;
+  }
+  
+  .suggestion-button {
+    padding: 6px 8px;
+    font-size: 12px;
+    margin-bottom: 5px; /* Espacement vertical entre les boutons */
+  }
+  
+  /* Ajout d'un onglet pour accéder à l'historique */
+  .chat-history::before {
+    content: "Message History";
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 8px 8px 0 0;
+    font-size: 12px;
+  }
+}
+
+/* Très petits écrans */
+@media screen and (max-width: 480px) {
+  .character img {
+    height: 45vh;
+  }
+  
+  .character {
+    bottom: 90px; /* Plus de place entre le personnage et l'input */
+  }
+  
+  .dialog-bubble {
+    font-size: 13px;
+    padding: 12px;
+    top: 110px; /* Ajustement pour éviter le chevauchement */
+  }
+  
+  .suggestions {
+    bottom: 100px; /* Plus d'espace avec la zone d'input */
+    gap: 5px;
+    padding: 8px;
+  }
+  
+  .suggestion-button {
+    padding: 5px 7px;
+    font-size: 11px;
+  }
+  
+  .input-container {
+    bottom: 20px;
+    width: 90%;
+  }
+}
+
+/* Optimisations pour l'accessibilité et utilisation du tactile */
+@media (hover: none) and (pointer: coarse) {
+  button, .lang-button, .theme-button, .suggestion-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .input-container input, 
+  .input-container button {
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
 }

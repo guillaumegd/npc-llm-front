@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ChatInput from "./ChatInput";
 import { useConversation } from "../hooks/useConversation";
 import { useTheme, LanguageType } from "../context/ThemeContext";
@@ -8,11 +8,14 @@ import "../styles/ChatContainer.css";
 import avatar1 from "../assets/avatar1.png"; // Avatar for medieval theme
 import avatar2 from "../assets/avatar2.png"; // Avatar for futuristic theme
 
+
 const ChatContainer: React.FC = () => {
   const { currentTheme, currentLanguage, setLanguage, getCharacterId, toggleTheme } = useTheme();
   
   // Use refs to track previous values
   const previousCharacterId = useRef<number | null>(null);
+  
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
   // Get characterId based on current theme and language
   const characterId = getCharacterId();
@@ -28,6 +31,7 @@ const ChatContainer: React.FC = () => {
   } = useConversation(characterId);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const historyRef = useRef<HTMLDivElement>(null);
 
   // Select avatar and name based on theme
   const avatarImage = currentTheme === 'medieval' ? avatar1 : avatar2;
@@ -53,6 +57,16 @@ const ChatContainer: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Effet pour détecter les changements de taille d'écran
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Handle language change
   const handleLanguageChange = (lang: LanguageType) => {
@@ -81,18 +95,21 @@ const ChatContainer: React.FC = () => {
           <button 
             onClick={() => handleLanguageChange('en')}
             className={`lang-button ${currentLanguage === 'en' ? 'active' : ''}`}
+            aria-label="English language"
           >
             EN
           </button>
           <button 
             onClick={() => handleLanguageChange('fr')}
             className={`lang-button ${currentLanguage === 'fr' ? 'active' : ''}`}
+            aria-label="French language"
           >
             FR
           </button>
           <button 
             onClick={() => handleLanguageChange('pt')}
             className={`lang-button ${currentLanguage === 'pt' ? 'active' : ''}`}
+            aria-label="Portuguese language"
           >
             PT
           </button>
@@ -100,21 +117,29 @@ const ChatContainer: React.FC = () => {
       </div>
 
       {/* Scrollable message area (history) */}
-      <div className="chat-history">
-        <h3>History</h3>
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`history-message ${
-              message.isUser ? "user-message" : "bot-message"
-            }`}
-          >
-            <strong>{message.isUser ? "You" : characterName}: </strong>
-            {message.content}
+      {/* Conditionally render chat history based on screen size */}
+      {(windowWidth > 768) && (
+        <div 
+          className="chat-history"
+          ref={historyRef}
+        >
+          <h3>History</h3>
+          <div className="history-messages-container">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`history-message ${
+                  message.isUser ? "user-message" : "bot-message"
+                }`}
+              >
+                <strong>{message.isUser ? "You" : characterName}: </strong>
+                {message.content}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+        </div>
+      )}
 
       {/* Character */}
       <div className="character">
@@ -149,6 +174,7 @@ const ChatContainer: React.FC = () => {
               key={index}
               onClick={() => sendMessage(intent.content)}
               className="suggestion-button"
+              aria-label={`Suggestion: ${intent.content}`}
             >
               {intent.content}
             </button>

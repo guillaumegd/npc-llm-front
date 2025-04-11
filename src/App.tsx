@@ -27,41 +27,30 @@ const AppContent = () => {
     // Add the class corresponding to the current theme
     document.body.classList.add(`theme-${currentTheme}`);
     
+    // Add meta viewport tag for responsive design if it doesn't exist
+    if (!document.querySelector('meta[name="viewport"]')) {
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
   }, [currentTheme]);
 
   if (!mounted) return null; // Avoid server-side rendering to prevent inconsistencies
 
   return (
-    <div style={{
+    <div className="app-container" style={{
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
       position: 'relative'
     }}>
-      {/* Theme toggle button */}
-      {/* <button
-        onClick={toggleTheme}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          zIndex: 100,
-          padding: '5px 10px',
-          background: 'rgba(0,0,0,0.5)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer'
-        }}
-      >
-        Change Theme ({currentTheme})
-      </button> */}
-      
-      <div style={{ 
+      <div className="app-content" style={{ 
         flex: 1,
         overflow: 'hidden',
-        display: 'flex'
+        display: 'flex',
+        width: '100%'
       }}>
         <ChatContainer />
       </div>
