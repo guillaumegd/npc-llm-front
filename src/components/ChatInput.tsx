@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent, useEffect, useRef } from 'react';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -7,6 +7,7 @@ interface ChatInputProps {
 
 const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }) => {
   const [message, setMessage] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = () => {
     if (message.trim() && !disabled) {
@@ -22,9 +23,17 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled = false }
     }
   };
 
+  // Mettre le focus sur le textarea quand il est activé
+  useEffect(() => {
+    if (!disabled && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [disabled]);
+
   return (
     <div className="chat-input-container">
       <textarea
+        ref={textareaRef}
         className="chat-input-textarea"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
