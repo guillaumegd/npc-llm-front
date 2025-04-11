@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import ChatContainer from './components/ChatContainer'
 import { ThemeProvider, useTheme } from './context/ThemeContext'
@@ -7,25 +7,29 @@ import { ThemeProvider, useTheme } from './context/ThemeContext'
 import './styles/ChatContainer.css'
 import './styles/ChatInput.css'
 
+// Import dynamique des styles de thème
+import './styles/themes/medieval.css'
+import './styles/themes/futuristic.css'
+
 // Composant principal qui utilise le contexte de thème
 const AppContent = () => {
   const { currentTheme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  // Effet pour charger le CSS du thème actuel
+  // Effet pour appliquer les classes CSS du thème actuel
   useEffect(() => {
-    // Suppression de tous les liens de thèmes précédents
-    const oldThemeLink = document.getElementById('theme-css');
-    if (oldThemeLink) {
-      oldThemeLink.remove();
-    }
-
-    // Création et ajout du nouveau lien de thème
-    const link = document.createElement('link');
-    link.id = 'theme-css';
-    link.rel = 'stylesheet';
-    link.href = `./src/styles/themes/${currentTheme}.css`;
-    document.head.appendChild(link);
+    // Marquer le composant comme monté
+    setMounted(true);
+    
+    // Supprimer toutes les classes de thème du body
+    document.body.classList.remove('theme-medieval', 'theme-futuristic');
+    
+    // Ajouter la classe correspondant au thème actuel
+    document.body.classList.add(`theme-${currentTheme}`);
+    
   }, [currentTheme]);
+
+  if (!mounted) return null; // Éviter le rendu côté serveur pour prévenir les incohérences
 
   return (
     <div style={{
