@@ -31,14 +31,16 @@ export const useConversation = (initialCharacterId: number = 1) => {
   
   // Reference to track if a reset call is in progress
   const isResettingRef = useRef(false);
-
+  
   // Function to initialize/reset the conversation
-  const initializeConversation = useCallback(async () => {
+  const initializeConversation = useCallback(async (forceId?: number) => {
     // Avoid multiple simultaneous calls
     if (isResettingRef.current) return;
     isResettingRef.current = true;
     
-    console.log(`Initializing conversation with character ID: ${characterId}`);
+    // Use the provided ID if available, otherwise use the current characterId
+    const idToUse = forceId !== undefined ? forceId : characterId;
+    console.log(`Initializing conversation with character ID: ${idToUse}`);
     
     setMessages([]);
     setCurrentNodeId(null);
@@ -50,7 +52,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
     try {
       // Send a request with empty content and null nodeId to get the first message
       const initialNode = await apiService.sendMessage(
-        characterId,
+        idToUse,
         "",
         null,
         "",
@@ -95,6 +97,7 @@ export const useConversation = (initialCharacterId: number = 1) => {
   useEffect(() => {
     if (initialCharacterId !== characterId) {
       console.log(`Character ID changed from ${characterId} to ${initialCharacterId}`);
+      // Just update the ID, don't reset automatically
       setCharacterId(initialCharacterId);
     }
   }, [initialCharacterId, characterId]);
@@ -107,13 +110,14 @@ export const useConversation = (initialCharacterId: number = 1) => {
     }
   }, [initializeConversation]);
 
-  // Reset the conversation when characterId changes
-  useEffect(() => {
-    if (!initialRenderRef.current) {
-      console.log(`Character ID effect triggered with ID: ${characterId}`);
-      initializeConversation();
-    }
-  }, [characterId, initializeConversation]);
+  // Disabled: Reset the conversation when characterId changes
+  // We'll let the parent component handle this to avoid conflicts
+  // useEffect(() => {
+  //   if (!initialRenderRef.current) {
+  //     console.log(`Character ID effect triggered with ID: ${characterId}`);
+  //     initializeConversation();
+  //   }
+  // }, [characterId, initializeConversation]);
 
   // Function to change the character and reset the conversation
   const changeCharacter = useCallback((newCharacterId: number) => {

@@ -40,7 +40,7 @@ const AppContent = () => {
       position: 'relative'
     }}>
       {/* Theme toggle button */}
-      <button
+      {/* <button
         onClick={toggleTheme}
         style={{
           position: 'absolute',
@@ -56,7 +56,7 @@ const AppContent = () => {
         }}
       >
         Change Theme ({currentTheme})
-      </button>
+      </button> */}
       
       <div style={{ 
         flex: 1,
