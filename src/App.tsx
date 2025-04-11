@@ -13,7 +13,7 @@ import './styles/themes/futuristic.css'
 
 // Main component that uses the theme context
 const AppContent = () => {
-  const { currentTheme, toggleTheme } = useTheme();
+  const { currentTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Effect to apply CSS classes for the current theme
